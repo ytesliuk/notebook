@@ -8,9 +8,9 @@ public class Address {
     private String city;
     private String string;
     private String building;
-    private int apartment;
+    private String apartment;
 
-    public Address(String index, String city, String string, String building, int apartment) {
+    public Address(String index, String city, String string, String building, String apartment) {
         this.index = index;
         this.city = city;
         this.string = string;
@@ -50,11 +50,11 @@ public class Address {
         this.building = building;
     }
 
-    public int getApartment() {
+    public String getApartment() {
         return apartment;
     }
 
-    public void setApartment(int apartment) {
+    public void setApartment(String apartment) {
         this.apartment = apartment;
     }
 

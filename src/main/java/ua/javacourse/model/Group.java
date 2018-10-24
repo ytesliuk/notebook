@@ -36,4 +36,13 @@ public enum Group {
         }
         throw new IllegalArgumentException();
     }
+
+    public static boolean isValidGroup(String russianName){
+        for (Group g : Group.values()) {
+            if (g.russianName.equalsIgnoreCase(russianName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
