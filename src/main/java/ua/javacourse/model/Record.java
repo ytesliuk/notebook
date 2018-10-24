@@ -1,8 +1,6 @@
 package ua.javacourse.model;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Yuliia Tesliuk on 10/23/2018
@@ -12,12 +10,12 @@ public class Record implements Comparable {
     private String firstName;
     private String middleName;
     private String nickname;
-    private String comment;
     private Group group;
     private List phoneNumbers;
     private String email;
     private String skype;
     private Address address;
+    private String comment;
     private Date createDate;
     private Date changeDate;
 
@@ -25,8 +23,11 @@ public class Record implements Comparable {
         this.lastName = record.get(RecordFieldsEnum.LAST_NAME);
         this.firstName = record.get(RecordFieldsEnum.FIRST_NAME);
         this.middleName = record.get(RecordFieldsEnum.MIDDLE_NAME);
+        this.nickname = record.get(RecordFieldsEnum.NICKNAME);
         this.group = Group.getGroup(record.get(RecordFieldsEnum.GROUP));
-       // this.phoneNumbers = record.get(RecordFieldsEnum.);
+        this.phoneNumbers = new ArrayList<String>();
+        phoneNumbers.add(record.get(RecordFieldsEnum.HOME_PHONE_NUMBER));
+        phoneNumbers.add(record.get(RecordFieldsEnum.MOBILE_PHONE_NUMBER));
         this.email = record.get(RecordFieldsEnum.EMAIL);
         this.skype = record.get(RecordFieldsEnum.SKYPE);
         this.address = new Address( record.get(RecordFieldsEnum.INDEX),
@@ -34,6 +35,7 @@ public class Record implements Comparable {
                                     record.get(RecordFieldsEnum.STREET),
                                     record.get(RecordFieldsEnum.BUILDING),
                                     record.get(RecordFieldsEnum.APT));
+        this.comment = record.get(RecordFieldsEnum.COMMENT);
         createDate = new Date();
     }
 
@@ -125,5 +127,17 @@ public class Record implements Comparable {
     public int compareTo(Object o) {
         Record rec = (Record) o;
         return (this.lastName + this.firstName + this.middleName).compareTo(rec.lastName + rec.firstName + rec.middleName);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder record = new StringBuilder();
+        record.append(lastName).append(" ").append(firstName).append(" ").append(middleName).append(" ")
+                .append(nickname.isEmpty() ? "" : "(" + nickname + ")").append(" в группе ").append(group.getRussianName())
+                .append("\n").append("номера телефонов: ").append(Arrays.toString(phoneNumbers.toArray()))
+                .append("\n").append("email: ").append(email).append(" / skype: ").append(skype)
+                .append("\n").append("адресс: ").append(address.toString())
+                .append("\n").append("комментарий: ").append(comment);
+        return record.toString();
     }
 }

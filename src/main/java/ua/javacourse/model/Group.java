@@ -1,8 +1,5 @@
 package ua.javacourse.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Created by Yuliia Tesliuk on 10/23/2018
  */

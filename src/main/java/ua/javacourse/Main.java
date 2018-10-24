@@ -15,6 +15,6 @@ public class Main
         NotebookView view = new NotebookView();
         NotebookController controller = new NotebookController(notebook, view);
 
-        controller.infoRequest();
+        controller.addRecord();
     }
 }

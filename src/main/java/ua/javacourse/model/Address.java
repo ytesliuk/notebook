@@ -21,39 +21,30 @@ public class Address {
     public String getIndex() {
         return index;
     }
-
     public void setIndex(String index) {
         this.index = index;
     }
-
     public String getCity() {
         return city;
     }
-
     public void setCity(String city) {
         this.city = city;
     }
-
     public String getString() {
         return string;
     }
-
     public void setString(String string) {
         this.string = string;
     }
-
     public String getBuilding() {
         return building;
     }
-
     public void setBuilding(String building) {
         this.building = building;
     }
-
     public String getApartment() {
         return apartment;
     }
-
     public void setApartment(String apartment) {
         this.apartment = apartment;
     }

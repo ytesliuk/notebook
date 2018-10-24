@@ -32,7 +32,12 @@ public class NotebookController {
         this.recordData = new EnumMap<>(RecordFieldsEnum.class);
     }
 
-    public void infoRequest(){
+    public void addRecord(){
+        Record newRecord = infoRequest();
+        view.showMessage(notebook.addRecord(newRecord) ? ("контакт создан \n\n" + newRecord.toString()) : "контакт с таким именем уже существует");
+    }
+
+    private Record infoRequest(){
         view.showMessage("Заполните последовательно поля. Если поле не является обязательным его можно пропустить нажав \"enter\"\n");
         for (RecordFieldsEnum rg : RecordFieldsEnum.values()){
             view.showMessage(rg.getName() + ": ");
@@ -41,10 +46,10 @@ public class NotebookController {
                 if (rg == RecordFieldsEnum.GROUP &&! Group.isValidGroup(userInput)) {
                     view.showMessage("Такой группы контактов не существует. Выберите из " +
                                     Arrays.toString(Arrays.stream(Group.values())
-                            .map(x -> x.getRussianName())
+                            .map(Group::getRussianName)
                             .toArray()));
                 } else if (!isValid(rg.getPattern(), userInput) && !userInput.isEmpty()) {
-                    view.showMessage("Поле \"" + rg.getName() + "\" должно быть заполнено в формате: " + rg.getPattern());
+                    view.showMessage("Поле \"" + rg.getName() + "\" должно быть заполнено в формате " + rg.getPattern() + ": ");
                 } else if (userInput.isEmpty() && rg.isRequired()) {
                     view.showMessage("Поле \"" + rg.getName() + "\" должно быть заполнено: ");
                 } else {
@@ -53,7 +58,7 @@ public class NotebookController {
                 }
             } while(true);
         }
-        notebook.addRecord(new Record(recordData));
+        return new Record(recordData);
     }
     
     public static boolean isValid(Pattern pattern, String input){
