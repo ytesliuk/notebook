@@ -4,32 +4,44 @@ import ua.javacourse.NotebookView;
 import ua.javacourse.model.Group;
 import ua.javacourse.model.Notebook;
 import ua.javacourse.model.Record;
-import ua.javacourse.model.RecordFieldsEnum;
+import ua.javacourse.model.RecFields;
 
-import java.awt.image.VolatileImage;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Created by Yuliia Tesliuk on 10/23/2018
  */
 public class NotebookController {
+    private Properties properties;
     private Notebook notebook;
     private NotebookView view;
     private Scanner input;
-    private Map<RecordFieldsEnum, String> recordData;
+    private Map<RecFields, String> recordData;
 
     public NotebookController(Notebook notebook, NotebookView view) {
         this.notebook = notebook;
         this.view = view;
+        this.properties = new Properties();
         this.input = new Scanner(System.in);
-        this.recordData = new EnumMap<>(RecordFieldsEnum.class);
+        this.recordData = new EnumMap<>(RecFields.class);
+        propertyLoader();
+    }
+
+    private void propertyLoader(){
+        try {
+            FileInputStream propStream = new FileInputStream("regexp_en_ru.properties");
+            // applying UTF-8
+            InputStreamReader streamReader = new InputStreamReader(propStream,"UTF-8");
+            properties.load(streamReader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addRecord(){
@@ -39,17 +51,17 @@ public class NotebookController {
 
     private Record infoRequest(){
         view.showMessage("Заполните последовательно поля. Если поле не является обязательным его можно пропустить нажав \"enter\"\n");
-        for (RecordFieldsEnum rg : RecordFieldsEnum.values()){
+        for (RecFields rg : RecFields.values()){
             view.showMessage(rg.getName() + ": ");
             do {
                 String userInput = input.nextLine();
-                if (rg == RecordFieldsEnum.GROUP &&! Group.isValidGroup(userInput)) {
+                if (rg == RecFields.GROUP &&! Group.isValidGroup(userInput)) {
                     view.showMessage("Такой группы контактов не существует. Выберите из " +
                                     Arrays.toString(Arrays.stream(Group.values())
                             .map(Group::getRussianName)
                             .toArray()));
-                } else if (!isValid(rg.getPattern(), userInput) && !userInput.isEmpty()) {
-                    view.showMessage("Поле \"" + rg.getName() + "\" должно быть заполнено в формате " + rg.getPattern() + ": ");
+                } else if (!isValid(Pattern.compile(properties.getProperty(rg.toString())), userInput) && !userInput.isEmpty()) {
+                    view.showMessage("Поле \"" + rg.getName() + "\" должно быть заполнено в формате " + properties.getProperty(rg.toString()) + ": ");
                 } else if (userInput.isEmpty() && rg.isRequired()) {
                     view.showMessage("Поле \"" + rg.getName() + "\" должно быть заполнено: ");
                 } else {
