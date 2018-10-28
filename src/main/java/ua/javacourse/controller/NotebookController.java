@@ -35,7 +35,7 @@ public class NotebookController {
 
     private void propertyLoader(){
         try {
-            FileInputStream propStream = new FileInputStream("regexp_en_ru.properties");
+            FileInputStream propStream = new FileInputStream("target/classes/regexp_en_ru.properties");
             // applying UTF-8
             InputStreamReader streamReader = new InputStreamReader(propStream,"UTF-8");
             properties.load(streamReader);
@@ -46,7 +46,12 @@ public class NotebookController {
 
     public void addRecord(){
         Record newRecord = infoRequest();
-        view.showMessage(notebook.addRecord(newRecord) ? ("контакт создан \n\n" + newRecord.toString()) : "контакт с таким именем уже существует");
+        try {
+            notebook.addRecord(newRecord);
+            view.showMessage("контакт создан \n\n" + newRecord.toString());
+        } catch (DuplicatedRecordException e) {
+            e.printStackTrace();
+        }
     }
 
     private Record infoRequest(){

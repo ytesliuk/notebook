@@ -1,5 +1,7 @@
 package ua.javacourse.model;
 
+import ua.javacourse.controller.DuplicatedRecordException;
+
 import java.util.TreeSet;
 
 /**
@@ -16,7 +18,11 @@ public class Notebook {
         return notebook;
     }
 
-    public boolean addRecord(Record record) {
-        return notebook.add(record);
+    public boolean addRecord(Record record) throws DuplicatedRecordException {
+        if (notebook.add(record)) {
+            return true;
+        } else {
+            throw new DuplicatedRecordException("There is already a record with this name", record);
+        }
     }
 }
