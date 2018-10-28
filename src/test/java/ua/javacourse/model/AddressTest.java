@@ -13,14 +13,14 @@ class AddressTest {
 
     @BeforeEach
     void setUp(){
-        address = new Address("02097","Киев","Улица","13/2",100);
+        address = new Address("02097","Киев","Улица","13/2","100");
     }
 
 
     @Test
     void toStringTest() {
         String result = address.toString();
-        String exected = "02097, г. Киев, ул. Улица 13/2, кв. 100";
-        assertTrue(result.equals(exected));
+        String expected = "02097, г. Киев, ул. Улица 13/2, кв. 100";
+        assertTrue(result.equals(expected));
     }
 }
